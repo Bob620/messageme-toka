@@ -131,9 +131,9 @@ chataClient.on('message', async message => {
 		}};
 
 		text.forEach(async word => {
-			const mentionedName = word.slice(1);
+			const mentionedName = word.slice(1).replace(/\W+.*/gmi, '');
 			if (word.startsWith('@') &&	mentionable.includes(mentionedName) && (await redisComm.get(`messageme:hooks:${mentionedName}:notify`) === 'true')) {
-				const discordUser = await discordClient.fetchUser(await redisComm.get(`messageme:hooks:${mentionedName}:discordid`))
+				const discordUser = await discordClient.fetchUser(await redisComm.get(`messageme:hooks:${mentionedName}:discordid`));
 				await discordUser.send(discordMessage);
 			}
 		});
